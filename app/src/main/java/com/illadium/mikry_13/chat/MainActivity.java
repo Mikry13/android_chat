@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
 
         messages = new ArrayList<>();
 
-        mAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
+        mAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, messages);
 
         chat_rv.setAdapter(mAdapter);
         //chat_rv.setOnItemClickListener(mAdapter);
@@ -58,12 +58,13 @@ public class MainActivity extends AppCompatActivity {
             public void run()
             {
                 try {
-                    socket = new Socket("localhost", 2019);
+                    socket = new Socket("10.0.2.2", 2019);
                     in = new Scanner(socket.getInputStream());
                     out = new PrintStream(socket.getOutputStream());
                 }catch (IOException e)
                 {
                     e.printStackTrace();
+                    return;
                 }
 
                 for(;;)
@@ -85,6 +86,7 @@ public class MainActivity extends AppCompatActivity {
         final String sent_message = editText_send.getText().toString();
 
         messages.add(sent_message);
+        mAdapter.notifyDataSetChanged();
 
         new Thread()
         {
